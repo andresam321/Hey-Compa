@@ -1,0 +1,39 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+
+# Database (SQLite, optional for dev)
+*.sqlite3
+*.db
+
+# Flask migrations
+instance/
+migrations/
+
+# Logs
+*.log
+
+# IDE/editor junk
+.vscode/
+.idea/
+.DS_Store
+
+# Compiled files
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Pytest/cache
+.pytest_cache/
+.cache/

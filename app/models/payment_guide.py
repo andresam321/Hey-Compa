@@ -1,0 +1,15 @@
+from .db import db, environment, SCHEMA, add_prefix_for_prod
+from datetime import datetime
+
+class PaymentGuide(db.Model):
+    __tablename__ = 'payment_guides'
+
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    vendor_name = db.Column(db.String(120), nullable=False)
+    step_texts = db.Column(db.JSON, nullable=False)  # e.g. ["Go to site", "Click Pay"]
+    step_images = db.Column(db.JSON, nullable=True)  # Optional screenshots
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

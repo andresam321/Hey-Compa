@@ -1,0 +1,28 @@
+# Web Framework
+Flask==2.2.5
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+Flask-Cors==3.0.10
+Flask-Login==0.6.2
+Flask-WTF==1.1.1
+
+# Environment & Config
+python-dotenv==1.0.1  # <-- Handles .env loading
+
+# Server (for Docker deployment)
+gunicorn==21.2.0
+
+# OCR + Image Processing
+pytesseract==0.3.10
+Pillow==10.2.0
+
+# Date Parsing
+dateparser==1.2.0
+
+# PostgreSQL driver
+psycopg2-binary==2.9.9
+
+# Optional HTTP client
+requests==2.31.0
+
+werkzeug<3

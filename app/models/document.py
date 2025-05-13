@@ -17,3 +17,18 @@ class Document(db.Model):
     was_useful = db.Column(db.Boolean, default=True)
     corrections = db.Column(db.JSON, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+    def to_dict(self):
+        return{
+            "id":self.id,
+            "user_id":self.user_id,
+            "filename":self.filename,
+            "extracted_text":self.extracted_text,
+            "expiration_date":self.expiration_date,
+            "amount_due":self.amount_due,
+            "vendor_detected":self.vendor_detected,
+            "was_useful":self.was_useful,
+            "corrections":self.corrections,
+            "created_at":self.created_at
+        }

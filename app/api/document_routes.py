@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models import Document, db, PaymentGuide
-from app.utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
+from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
 
 doc_routes = Blueprint('documents', __name__)
 

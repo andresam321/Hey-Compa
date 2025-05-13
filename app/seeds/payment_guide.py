@@ -1,4 +1,5 @@
-from app.models import db, environment, SCHEMA, PaymentGuide
+from app.models import db, PaymentGuide
+from app.models.db import environment, SCHEMA
 from sqlalchemy.sql import text
 from datetime import datetime
 

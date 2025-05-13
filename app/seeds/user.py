@@ -1,4 +1,5 @@
-from app.models import db, User, environment, SCHEMA
+from app.models import db, User
+from app.models.db import environment, SCHEMA
 from sqlalchemy.sql import text
 
 # Adds demo users, you can add other users here if you want

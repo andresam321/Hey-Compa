@@ -9,7 +9,6 @@ class Document(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable = False)
-    filename = db.Column(db.String(120), nullable=False)
     extracted_text = db.Column(db.Text, nullable=False)
     expiration_date = db.Column(db.Date, nullable=True)
     amount_due = db.Column(db.String, nullable=True)

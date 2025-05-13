@@ -5,7 +5,7 @@ import re
 import dateparser
 
  
-def extract_text(image_path):
+def extract_image_text(image_path):
     image = Image.open(image_path)
     return pytesseract.image_to_string(image)
 

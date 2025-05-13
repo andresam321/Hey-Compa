@@ -39,7 +39,7 @@ def create_app(config_class=Config):
 
     app.config.from_object(Config)
 
-    app.register_blueprint(user_routes, url_prefix='/api/users')
+    # app.register_blueprint(user_routes, url_prefix='/api/users')
 
 # Since we are deploying with Docker and Flask,
 # we won't be using a buildpack when we deploy to Heroku.

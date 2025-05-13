@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models import Document, db, PaymentGuide
-from app.utils import detect_vendor, parse_amount, parse_due_date, find_amount, extract_image_text
+from app.utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
 
 doc_routes = Blueprint('Document', __name__)
 
@@ -21,6 +21,9 @@ def submit_document_from_image():
         vendor = detect_vendor(extracted_text, user_id)
         expiration = parse_due_date(extracted_text)
         amount = find_amount(extracted_text)
+        phone_number = extract_phone_number(extracted_text)
+        account_number = parse_account_number(extracted_text)
+        # Optional: Save phone number and account number to the document 
 
         # Step 3: Save to DB
         doc = Document(
@@ -28,7 +31,9 @@ def submit_document_from_image():
             extracted_text=extracted_text,
             vendor_detected=vendor,
             expiration_date=expiration,
-            amount_due=amount
+            amount_due=amount,
+            phone_number=phone_number,
+            account_number=account_number,
         )
         db.session.add(doc)
         db.session.commit()

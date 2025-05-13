@@ -6,6 +6,10 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
 from .models import db
 from .config import Config
+from .seeds import seed_commands
+# from .api.user_routes import user_routes
+from .api.document_routes import doc_routes
+from .api.payment_guide import payment_guide_routes
 
 login = LoginManager() 
 
@@ -22,7 +26,7 @@ def create_app(config_class=Config):
     csrf = CSRFProtect()
     csrf.init_app(app)
     CORS(app, supports_credentials=True)
-    # app.cli.add_command(seed_commands)
+    app.cli.add_command(seed_commands)
 
 
     # @login.user_loader
@@ -33,8 +37,9 @@ def create_app(config_class=Config):
     # Tell flask about our seed commands
 
 
- 
+    app.config.from_object(Config)
 
+    app.register_blueprint(user_routes, url_prefix='/api/users')
 
 # Since we are deploying with Docker and Flask,
 # we won't be using a buildpack when we deploy to Heroku.

@@ -28,3 +28,11 @@ def detect_vendor(text, user_id):
         if guide.vendor_name.lower() in text.lower():
             return guide.vendor_name
     return "Unknown"
+
+def parse_account_number(text):
+    match = re.search(r'\b\d{4,}\b', text)
+    return match.group() if match else None
+
+def extract_phone_number(text):
+    match = re.search(r'(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})', text)
+    return match.group() if match else None

@@ -4,8 +4,10 @@ from datetime import datetime
 class PaymentGuide(db.Model):
     __tablename__ = 'payment_guides'
 
-    if environment == "production":
-        __table_args__ = {"schema": SCHEMA}
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'vendor_name', name='unique_user_vendor'),
+        {"schema": SCHEMA} if environment == "production" else {}
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable = False)
@@ -15,6 +17,8 @@ class PaymentGuide(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='payment_guides', lazy=True)
+    documents = db.relationship('Document', backref='payment_guide', lazy=True)
+
 
     def to_dict(self):
         return {

@@ -20,9 +20,9 @@ class Document(db.Model):
     corrections = db.Column(db.JSON, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref='documents', lazy=True)
+    user = db.relationship('User', back_populates='documents', lazy=True)
 
-    payment_guide = db.relationship('PaymentGuide', backref='documents', lazy=True)
+    payment_guide = db.relationship('PaymentGuide', back_populates='documents', lazy=True)
 
 
     def to_dict(self):

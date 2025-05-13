@@ -16,8 +16,8 @@ class PaymentGuide(db.Model):
     step_images = db.Column(db.JSON, nullable=True)  # Optional screenshots
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref='payment_guides', lazy=True)
-    documents = db.relationship('Document', backref='payment_guide', lazy=True)
+    user = db.relationship('User', back_populates='payment_guides', lazy=True)
+    documents = db.relationship('Document', back_populates='payment_guide', lazy=True)
 
 
     def to_dict(self):

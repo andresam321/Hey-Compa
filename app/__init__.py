@@ -7,7 +7,7 @@ from flask_login import LoginManager
 from .models import db
 from .config import Config
 from .seeds import seed_commands
-# from .api.user_routes import user_routes
+from .api.user_routes import user_routes
 from .api.document_routes import doc_routes
 from .api.payment_guide import payment_guide_routes
 
@@ -39,7 +39,9 @@ def create_app(config_class=Config):
 
     app.config.from_object(Config)
 
-    # app.register_blueprint(user_routes, url_prefix='/api/users')
+    app.register_blueprint(user_routes, url_prefix='/api/users')
+    app.register_blueprint(doc_routes, url_prefix='/api/documents')
+    app.register_blueprint(payment_guide_routes, url_prefix='/api/payment_guide')
 
 # Since we are deploying with Docker and Flask,
 # we won't be using a buildpack when we deploy to Heroku.

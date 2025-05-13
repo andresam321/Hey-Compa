@@ -4,11 +4,12 @@ from PIL import Image
 import re 
 import dateparser
 
+ 
 def extract_text(image_path):
     image = Image.open(image_path)
     return pytesseract.image_to_string(image)
 
-def find_expiration_date(text):
+def parse_due_date(text):
     date_patterns = re.findall(r'\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b', text)
     for date_str in date_patterns:
         parsed_date = dateparser.parse(date_str)

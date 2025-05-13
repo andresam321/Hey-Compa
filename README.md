@@ -1,6 +1,6 @@
-# 🧠 Compa – Backend MVP
+# 🧠 Hey-Compa – Backend MVP
 
-Compa is your friendly backend assistant designed to help users (especially older or non-English speakers) manage and understand their bills. Built with Flask, SQLAlchemy, and OCR, Compa reads uploaded images, extracts key billing data, and guides users on how to pay — step-by-step.
+Hey-Compa is your friendly backend assistant designed to help users (especially older or non-English speakers) manage and understand their bills. Built with Flask, SQLAlchemy, and OCR, Compa reads uploaded images, extracts key billing data, and guides users on how to pay — step-by-step.
 
 ---
 
@@ -26,7 +26,7 @@ Compa is your friendly backend assistant designed to help users (especially olde
 
 ## 📁 Folder Structure (MVP)
 
-compa/
+Hey-Compa/
 ├── app/
 │ ├── init.py
 │ ├── api/

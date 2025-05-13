@@ -19,10 +19,8 @@ class User(db.Model, UserMixin):
     is_helper = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        if not self.employee_id:
-            self.employee_id = str(uuid.uuid4())
+    documents = db.relationship('Document', backref='user', lazy=True)
+    payment_guides = db.relationship('PaymentGuide', backref='user', lazy=True)
 
     @property
     def password(self):

@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, PaymentGuide, Document
+from flask_login import login_required, current_user
 
 payment_guide_routes = Blueprint('payment_guide', __name__)
 
-@payment_guide_routes.route('/payment-guide/<vendor>', methods=['GET'])
+@payment_guide_routes.route('/<vendor>', methods=['GET'])
+@login_required
 def get_or_generate_guide(vendor):
     user_id = request.args.get('user_id')
+    user_id = current_user.id
     if not user_id:
         return jsonify({'error': 'User ID is required'}), 400
     
@@ -42,9 +45,10 @@ def get_or_generate_guide(vendor):
     }), 200
 
 @payment_guide_routes.route('/payment-guide', methods=['POST'])
+@login_required
 def create_payment_guide():
     data = request.get_json()
-    user_id = data.get('user_id')
+    user_id = current_user.id
     vendor_name = data.get('vendor_name')
     step_texts = data.get('step_texts')
     step_images = data.get('step_images', [])
@@ -60,7 +64,7 @@ def create_payment_guide():
     # Create and save new guide
     new_guide = PaymentGuide(
         user_id=user_id,
-        vendor_name=vendor_name,
+        vendor_name = vendor_name.strip().lower(),
         step_texts=step_texts,
         step_images=step_images
     )

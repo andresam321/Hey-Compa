@@ -6,17 +6,16 @@ from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extr
 
 doc_routes = Blueprint('documents', __name__)
 
-
-@doc_routes.route('/document/image', methods=['POST'])
+#tested
+@doc_routes.route('/image', methods=['POST'])
+@login_required
 def submit_document_from_image():
-    user_id = request.form.get('user_id')
+    user_id = current_user.id
     image = request.files.get('image')  # expects multipart/form-data
 
     if not user_id or not image:
         return jsonify({'error': 'user_id and image are required'}), 400
     
-    user_id = current_user.id
-
     try:
         # Step 1: Run OCR
         extracted_text = extract_image_text(image)

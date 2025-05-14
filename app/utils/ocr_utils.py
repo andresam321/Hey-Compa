@@ -1,69 +1,10 @@
 from app.models import PaymentGuide
 import pytesseract
-from thefuzz import fuzz
 from PIL import Image
 import re 
 import dateparser
 
-vendor_keywords = {
-    "pg&e": "PG&E",
-    "pacific gas and electric": "PG&E",
-    "verizon": "Verizon",
-    "at&t": "AT&T",
-    "att": "AT&T",
-    "comcast": "Comcast",
-    "xfinity": "Comcast",
-    "spectrum": "Spectrum",
-    "charter": "Spectrum",
-    "t-mobile": "T-Mobile",
-    "tmobile": "T-Mobile",
-    "centurylink": "CenturyLink",
-    "lumen": "CenturyLink",
-    "centerpoint": "CenterPoint Energy",
-    "centerpoint energy": "CenterPoint Energy",
-    "socalgas": "SoCalGas",
-    "southern california gas": "SoCalGas",
-    "ladwp": "LADWP",
-    "los angeles department of water and power": "LADWP",
-    "con edison": "Con Edison",
-    "coned": "Con Edison",
-    "national grid": "National Grid",
-    "duke energy": "Duke Energy",
-    "georgia power": "Georgia Power",
-    "pepco": "Pepco",
-    "comed": "ComEd",
-    "dominion": "Dominion Energy",
-    "fpl": "Florida Power & Light",
-    "florida power": "Florida Power & Light",
-    "smud": "SMUD",
-    "bge": "BGE",
-    "pge": "PG&E",
-    "nyseg": "NYSEG",
-    "sdge": "SDG&E",
-    "san diego gas": "SDG&E"
-}
-
-
-def detect_vendor(text, user_id=None):
-    normalized_text = text.lower()
-
-    # 🔍 Fuzzy match to handle OCR garble
-    for keyword, vendor in vendor_keywords.items():
-        if fuzz.partial_ratio(keyword, normalized_text) >= 80:
-            return vendor
-
-    # Optional: fallback to user’s guides
-    if user_id:
-        guides = PaymentGuide.query.filter_by(user_id=user_id).all()
-        for guide in guides:
-            if guide.vendor_name.lower() in normalized_text:
-                return guide.vendor_name
-
-    return "Unknown"
-
-
-
-
+ 
 def extract_image_text(image_path):
     image = Image.open(image_path)
     return pytesseract.image_to_string(image)
@@ -85,6 +26,13 @@ def find_amount(text):
     return None
 
 
+def detect_vendor(text, user_id):
+    # Get vendor names from this user’s saved guides
+    guides = PaymentGuide.query.filter_by(user_id=user_id).all()
+    for guide in guides:
+        if guide.vendor_name.lower() in text.lower():
+            return guide.vendor_name
+    return "Unknown"
 
 def parse_account_number(text):
     match = re.search(r'\d{5,}-\d{4,}', text)

@@ -37,3 +37,6 @@ dist/
 # Pytest/cache
 .pytest_cache/
 .cache/
+
+
+donut_model/

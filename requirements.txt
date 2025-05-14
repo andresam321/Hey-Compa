@@ -1,28 +1,48 @@
-# Web Framework
+# ----- Core Backend -----
 Flask==2.2.5
-Flask-SQLAlchemy==3.1.1
-Flask-Migrate==4.0.5
 Flask-Cors==3.0.10
 Flask-Login==0.6.2
-Flask-WTF==1.1.1
-
-# Environment & Config
-python-dotenv==1.0.1  # <-- Handles .env loading
-
-# Server (for Docker deployment)
+Flask-Migrate==4.0.5
+Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.2
+python-dotenv==1.0.1
 gunicorn==21.2.0
-
-# OCR + Image Processing
-pytesseract==0.3.10
-Pillow==10.2.0
-
-# Date Parsing
-dateparser==1.2.0
-
-# PostgreSQL driver
 psycopg2-binary==2.9.9
+WTForms==3.2.1
+Jinja2==3.1.6
+Werkzeug==2.3.8
 
-# Optional HTTP client
+# ----- ORM / DB -----
+SQLAlchemy==2.0.40
+alembic==1.15.2
+greenlet==3.2.2
+Mako==1.3.10
+
+# ----- Utilities -----
+Faker==37.1.0
+dateparser==1.2.0
 requests==2.31.0
+pytz==2025.2
+tzlocal==5.3.1
 
-werkzeug<3
+# ----- OCR / AI (Donut & OCR) -----
+pytesseract==0.3.10
+transformers==4.39.3
+torch==2.7.0
+torchvision==0.22.0
+accelerate==1.6.0
+Pillow==10.2.0
+thefuzz==0.22.1
+python-Levenshtein==0.27.1
+regex==2024.11.6
+huggingface-hub==0.31.2
+safetensors==0.5.3
+tokenizers==0.15.2
+sentencepiece==0.1.99
+protobuf>=3.20.0
+
+
+# ----- Optional Speed/Utility -----
+tqdm==4.67.1
+filelock==3.18.0
+packaging==25.0

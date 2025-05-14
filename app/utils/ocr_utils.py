@@ -10,16 +10,21 @@ def extract_image_text(image_path):
     return pytesseract.image_to_string(image)
 
 def parse_due_date(text):
-    date_patterns = re.findall(r'\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b', text)
-    for date_str in date_patterns:
-        parsed_date = dateparser.parse(date_str)
-        if parsed_date:
-            return parsed_date.date()
+    matches = re.findall(r'(Due by|Due on|Date Due|Due Date)?\s*(\w{3,9} \d{1,2},? \d{4})', text, re.IGNORECASE)
+    for _, date_str in matches:
+        parsed = dateparser.parse(date_str)
+        if parsed:
+            return parsed.date()
     return None
 
+
 def find_amount(text):
-    match = re.search(r'\$[\d,.]+', text)
-    return match.group() if match else None
+    matches = re.findall(r'\$[\d,]+\.\d{2}', text)
+    if matches:
+        # Pick the largest one — likely the total
+        return max(matches, key=lambda x: float(x.replace('$','').replace(',','')))
+    return None
+
 
 def detect_vendor(text, user_id):
     # Get vendor names from this user’s saved guides
@@ -30,7 +35,7 @@ def detect_vendor(text, user_id):
     return "Unknown"
 
 def parse_account_number(text):
-    match = re.search(r'\b\d{4,}\b', text)
+    match = re.search(r'\d{5,}-\d{4,}', text)
     return match.group() if match else None
 
 def extract_phone_number(text):

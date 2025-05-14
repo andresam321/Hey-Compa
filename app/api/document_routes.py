@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models import Document, db, PaymentGuide
+from flask_login import login_required,current_user
+
 from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
 
 doc_routes = Blueprint('documents', __name__)
@@ -12,6 +14,8 @@ def submit_document_from_image():
 
     if not user_id or not image:
         return jsonify({'error': 'user_id and image are required'}), 400
+    
+    user_id = current_user.id
 
     try:
         # Step 1: Run OCR
@@ -25,6 +29,7 @@ def submit_document_from_image():
         account_number = parse_account_number(extracted_text)
         # Optional: Save phone number and account number to the document 
 
+        guide = PaymentGuide.query.filter_by(user_id=user_id, vendor_name=vendor).first()
         # Step 3: Save to DB
         doc = Document(
             user_id=user_id,
@@ -34,6 +39,7 @@ def submit_document_from_image():
             amount_due=amount,
             phone_number=phone_number,
             account_number=account_number,
+            payment_guide_id=guide.id if guide else None
         )
         db.session.add(doc)
         db.session.commit()
@@ -44,6 +50,8 @@ def submit_document_from_image():
             'vendor_detected': vendor,
             'amount_due': amount,
             'expiration_date': str(expiration) if expiration else None,
+            'account_number': account_number,
+            'phone_number': phone_number,
             'extracted_text': extracted_text
         }), 201
 

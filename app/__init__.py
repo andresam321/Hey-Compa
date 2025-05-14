@@ -10,6 +10,8 @@ from .seeds import seed_commands
 from .api.user_routes import user_routes
 from .api.document_routes import doc_routes
 from .api.payment_guide import payment_guide_routes
+from .api.auth_routes import auth_routes
+from .models.user import User
 
 login = LoginManager() 
 
@@ -23,15 +25,15 @@ def create_app(config_class=Config):
     db.init_app(app)
     Migrate(app, db)
     # Application Security
-    csrf = CSRFProtect()
-    csrf.init_app(app)
+    # csrf = CSRFProtect()
+    # csrf.init_app(app)
     CORS(app, supports_credentials=True)
     app.cli.add_command(seed_commands)
 
 
-    # @login.user_loader
-    # def load_user(id):
-    #     return User.query.get(int(id))
+    @login.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
 
     # Tell flask about our seed commands
@@ -42,6 +44,7 @@ def create_app(config_class=Config):
     app.register_blueprint(user_routes, url_prefix='/api/users')
     app.register_blueprint(doc_routes, url_prefix='/api/documents')
     app.register_blueprint(payment_guide_routes, url_prefix='/api/payment_guide')
+    app.register_blueprint(auth_routes, url_prefix='/api/auth')
 
 # Since we are deploying with Docker and Flask,
 # we won't be using a buildpack when we deploy to Heroku.

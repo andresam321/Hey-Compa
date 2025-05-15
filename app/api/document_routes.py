@@ -23,9 +23,9 @@ def submit_document_from_image():
     ext = os.path.splitext(original_filename)[1]  # e.g., ".jpg" or ".png"
     filename = f"{uuid4()}{ext}"
     os.makedirs("uploads", exist_ok=True)
-    temp_path = os.path.join("uploads", filename)
+    temp_path = os.path.join("app/uploads", filename)
     image.save(temp_path)
-    print("🖼️ Saved image to:", temp_path)
+    print("Saved image to:", temp_path)
     
     if not ext.lower() in [".png", ".jpg", ".jpeg", ".webp"]:
         return jsonify({"error": "Unsupported image format"}), 400

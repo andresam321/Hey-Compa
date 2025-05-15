@@ -1,29 +1,39 @@
 from paddleocr import PaddleOCR
-from PIL import Image
+from PIL import Image, ImageEnhance
 import numpy as np
-import logging
-logging.basicConfig(level=logging.DEBUG)
-
-# ✅ Initialize PaddleOCR
-ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False)
+import os
+import cv2
+# print("Current directory:", os.getcwd())
 
 
-# ✅ Replace this with an image you already saved (like the Verizon or CenterPoint one)
-image_path = "uploads/test_receipt.jpg"  # <-- change this to your real image path
 
-# ✅ Load and convert image
+ocr = PaddleOCR(use_angle_cls=True, lang='en')
+
+image_path = "app/uploads/test_receipt.jpg"  
 img = Image.open(image_path).convert("RGB")
-img_np = np.array(img)
+print("line14", np.array(img).shape)
 
-# ✅ Run OCR
+# Log size and format
+print(f" Image size: {img.size}, format: {img.format}")
+
+# Optional: Boost contrast
+enhancer = ImageEnhance.Contrast(img)
+img = enhancer.enhance(2)
+
+# Optional: Resize up
+img = img.resize((img.width * 2, img.height * 2))
+
+# Convert to numpy
+img_np = np.array(img)
+result = ocr.ocr(image_path, cls=True)
+# Run OCR
 result = ocr.ocr(img_np, cls=True)
 
-# ✅ Print result
-print("\n📸 OCR Result:")
+print("\n OCR Result:")
 if result and result[0]:
     for line in result[0]:
-        if line:
-            for word_info in line:
-                print("📝", word_info[1][0])
-else:
-    print("❌ No text detected.")
+        if len(line) == 2 and isinstance(line[1], tuple):
+            text, confidence = line[1]
+            print(f"📝 {text} (confidence: {confidence:.2f})")
+        else:
+            print("⚠️ Skipped malformed entry:", line)

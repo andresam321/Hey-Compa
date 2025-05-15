@@ -9,7 +9,7 @@ from .config import Config
 from .seeds import seed_commands
 from .api.user_routes import user_routes
 from .api.document_routes import doc_routes
-from .api.payment_guide import payment_guide_routes
+from .api.payment_guide_routes import payment_guide_routes
 from .api.auth_routes import auth_routes
 from .models.user import User
 

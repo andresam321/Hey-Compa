@@ -18,7 +18,7 @@ Hey-Compa is your friendly backend assistant designed to help users (especially 
 
 - Python + Flask
 - Flask-Login, SQLAlchemy, Flask-Migrate
-- Tesseract OCR (`pytesseract`)
+- PaddleOCR (replacing pytesseract)
 - PostgreSQL or SQLite
 - JSON-based learning model via `PaymentGuide`
 
@@ -28,20 +28,27 @@ Hey-Compa is your friendly backend assistant designed to help users (especially 
 
 Hey-Compa/
 ├── app/
-│ ├── init.py
-│ ├── api/
-│ │ └── document_routes.py
-│ ├── models/
-│ │ ├── user.py
-│ │ ├── document.py
-│ │ └── payment_guide.py
-│ ├── utils/
-│ │ └── ocr_utils.py
+│   ├── uploads/ (temp saved images)    
+│   ├── __init__.py
+│   ├── api/
+│   │   └── auth_routes.py
+│       └── document_routes.py
+│       └── payment_guide_routes.py
+│       └── user_routes.py
+│   ├── models/
+│   │   ├── user.py
+│   │   ├── document.py
+│   │   └── payment_guide.py
+│   ├── utils/
+│   │   └── ocr_utils.py
+│   │   └── test_ocr_standalone.py
 ├── run.py
 ├── config.py
 ├── requirements.txt
+├── .gitignore
+├── .dockerignore
 ├── .flaskenv
-└── Dockerfile\
+└── Dockerfile
 
 
 

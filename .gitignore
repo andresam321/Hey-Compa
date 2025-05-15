@@ -37,3 +37,5 @@ dist/
 # Pytest/cache
 .pytest_cache/
 .cache/
+
+uploads/

@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
 from app.models import Document, db, PaymentGuide
 from flask_login import login_required,current_user
-
+from uuid import uuid4
+from werkzeug.utils import secure_filename
+import os
 from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
 
 doc_routes = Blueprint('documents', __name__)
@@ -15,10 +17,23 @@ def submit_document_from_image():
 
     if not user_id or not image:
         return jsonify({'error': 'user_id and image are required'}), 400
+
+    # Save image to temp path before processing
+    original_filename = secure_filename(image.filename)  # preserves extension
+    ext = os.path.splitext(original_filename)[1]  # e.g., ".jpg" or ".png"
+    filename = f"{uuid4()}{ext}"
+    os.makedirs("uploads", exist_ok=True)
+    temp_path = os.path.join("uploads", filename)
+    image.save(temp_path)
+    print("🖼️ Saved image to:", temp_path)
     
+    if not ext.lower() in [".png", ".jpg", ".jpeg", ".webp"]:
+        return jsonify({"error": "Unsupported image format"}), 400
+
     try:
         # Step 1: Run OCR
-        extracted_text = extract_image_text(image)
+        extracted_text = extract_image_text(temp_path)
+        # print("🔍 Extracted Text:", extracted_text)
 
         # Step 2: Run parsing logic
         vendor = detect_vendor(extracted_text, user_id)
@@ -55,4 +70,7 @@ def submit_document_from_image():
         }), 201
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': f'Failed to process image: {str(e)}'}), 500
+      

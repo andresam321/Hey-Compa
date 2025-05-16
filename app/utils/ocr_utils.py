@@ -6,6 +6,7 @@ from thefuzz import process, fuzz
 from paddleocr import PaddleOCR
 import numpy as np
 from PIL import Image
+import re
 
 # ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=True)
 
@@ -44,7 +45,11 @@ vendor_keywords = {
     "pge": "PG&E",
     "nyseg": "NYSEG",
     "sdge": "SDG&E",
-    "san diego gas": "SDG&E"
+    "san diego gas": "SDG&E",
+    "maine natural gas": "Maine Natural Gas",
+    "tucson electric power": "Tucson Electric Power",
+    "waste management": "Waste Management",
+    "city of boise utility billing service": "City of Boise Utility Billing Service",
 }
 
 
@@ -97,30 +102,53 @@ def extract_image_text(image_path):
 #uses regex to find the due date in the text
 #uses dateparser to parse the date string into a date object
 def parse_due_date(text):
-    matches = re.findall(
-        r'(Due by|Due on|Date Due|Due Date|Effective Date|Data Filed)?[:\s]*([A-Za-z]{3,9}\.? \d{1,2},? \d{4})',
-        text,
-        re.IGNORECASE
-    )
-    for _, date_str in matches:
-        parsed = dateparser.parse(date_str)
-        if parsed:
-            return parsed.date()
+    date_patterns = [
+        r'(due by|due on|date due|due date|effective date|data filed)?[:\s\n]*([A-Za-z]{3,9}\.?[\s\-]?\d{1,2},?\s?\d{4})',
+        r'(due by|due on|date due|due date|effective date|data filed)?[:\s\n]*([\d]{1,2}[/-][\d]{1,2}[/-][\d]{2,4})'
+    ]
+    
+    for pattern in date_patterns:
+        matches = re.findall(pattern, text, re.IGNORECASE)
+        for _, date_str in matches:
+            parsed = dateparser.parse(date_str)
+            if parsed:
+                return parsed.date()
     return None
 
 #uses regex to find the amount in the text
 #fallbacks to a different regex if no matches are found
 #uses max to find the largest amount in the text
 def find_amount(text):
+    # Normalize text
+    text = text.lower()
+
+    # Step 1: Context-aware match
+    due_patterns = [
+        r'(amount due[:\s]*)\$[\d,]+\.\d{2}',
+        r'(due now[:\s]*)\$[\d,]+\.\d{2}',
+        r'(total due[:\s]*)\$[\d,]+\.\d{2}',
+        r'(please pay[:\s]*)\$[\d,]+\.\d{2}'
+    ]
+
+    for pattern in due_patterns:
+        match = re.search(pattern, text)
+        if match:
+            amount = re.search(r'\$[\d,]+\.\d{2}', match.group())
+            if amount:
+                return amount.group()
+
+    # Step 2: Fallback — find all dollar amounts
     matches = re.findall(r'\$[\d,]+\.\d{2}', text)
     if not matches:
-        # Try fallback (e.g., $9422)
         matches = re.findall(r'\$\d{3,}', text)
+
+    # Step 3: Return lowest if no context match
     if matches:
         try:
-            return max(matches, key=lambda x: float(x.replace('$','').replace(',','')))
+            return min(matches, key=lambda x: float(x.replace('$','').replace(',','')))
         except:
             pass
+
     return None
 
 #uses fuzzy matching to find the vendor in the text

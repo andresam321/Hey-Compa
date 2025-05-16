@@ -43,7 +43,29 @@ def submit_document_from_image():
         account_number = parse_account_number(extracted_text)
         # Optional: Save phone number and account number to the document 
 
-        guide = PaymentGuide.query.filter_by(user_id=user_id, vendor_name=vendor).first()
+        normalized_vendor = vendor.strip().lower()
+
+        guide = PaymentGuide.query.filter_by(user_id=user_id, vendor_name=normalized_vendor).first()
+
+    
+        if not guide:
+            rough_guide_steps = [
+                f"Search for '{vendor}' website",
+                "Log in to your account",
+                "Navigate to the payment section",
+                "Enter the amount due",
+                "Select payment method",
+                "Confirm payment"
+            ]
+            new_guide = PaymentGuide(
+                user_id=user_id,
+                vendor_name=vendor.strip().lower(),
+                step_texts=rough_guide_steps,
+                step_images=[]
+            )
+            db.session.add(new_guide)
+            db.session.commit()  #
+            guide = new_guide
         # Step 3: Save to DB
         doc = Document(
             user_id=user_id,
@@ -53,13 +75,14 @@ def submit_document_from_image():
             amount_due=amount,
             phone_number=phone_number,
             account_number=account_number,
-            payment_guide_id=guide.id if guide else None
+            payment_guide_id=guide.id 
         )
         db.session.add(doc)
         db.session.commit()
-
+        
         # Step 4: Return response
         return jsonify({
+            'id': doc.id,
             'message': 'Document processed and stored successfully.',
             'vendor_detected': vendor,
             'amount_due': amount,

@@ -50,6 +50,12 @@ Hey-Compa/
 ├── .flaskenv
 └── Dockerfile
 
+## 📌 Project Goals
+- Make bill payment guidance accessible to anyone, especially underserved users
+- Create a mobile-first experience that requires minimal technical knowledge
+- Enable users to take a photo of their bill and instantly get guided steps
+- Build a compassionate AI layer that remembers user struggles and adapts
+- Keep Hey-Compa lightweight, low-cost, and privacy-friendly
 
 
 ## Future Upgrades

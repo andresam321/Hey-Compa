@@ -36,12 +36,22 @@ Hey-Compa/
 │       └── payment_guide_routes.py
 │       └── user_routes.py
 │   ├── models/
+│   │   ├── __init__.py
+│   │   ├── db.py
+│   │   ├── user.py
+│   │   ├── document.py
+│   │   └── payment_guide.py
+│   │   └── guide_progress.py
+│   ├── seeds/
+│   │   ├── __init__.py
+│   │   ├── document.py
 │   │   ├── user.py
 │   │   ├── document.py
 │   │   └── payment_guide.py
 │   ├── utils/
 │   │   └── ocr_utils.py
 │   │   └── test_ocr_standalone.py
+│   ├── services/
 ├── run.py
 ├── config.py
 ├── requirements.txt

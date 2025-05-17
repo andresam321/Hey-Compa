@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
 
     documents = db.relationship('Document', back_populates='user', lazy=True)
     payment_guides = db.relationship('PaymentGuide', back_populates='user', lazy=True)
+    guide_progress = db.relationship('GuideProgress', back_populates='user', lazy=True)
 
     @property
     def password(self):

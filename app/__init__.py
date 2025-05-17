@@ -10,6 +10,7 @@ from .seeds import seed_commands
 from .api.user_routes import user_routes
 from .api.document_routes import doc_routes
 from .api.payment_guide_routes import payment_guide_routes
+from .api.guide_progress import guide_progress_routes
 from .api.auth_routes import auth_routes
 from .models.user import User
 
@@ -45,6 +46,7 @@ def create_app(config_class=Config):
     app.register_blueprint(doc_routes, url_prefix='/api/documents')
     app.register_blueprint(payment_guide_routes, url_prefix='/api/payment_guide')
     app.register_blueprint(auth_routes, url_prefix='/api/auth')
+    app.register_blueprint(guide_progress_routes, url_prefix='/api/guide_progress')
 
 # Since we are deploying with Docker and Flask,
 # we won't be using a buildpack when we deploy to Heroku.

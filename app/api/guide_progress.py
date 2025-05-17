@@ -19,7 +19,7 @@ def start_guide(vendor):
     # if existing_progress:
     #     return jsonify({"error": "Guide already exists"}), 400
 
-    # 🧠 Fetch the actual guide
+    # Fetch the actual guide
     # print(f"[DEBUG] Looking for guide: user_id={user_id}, vendor_name={repr(vendor)}")
 
 

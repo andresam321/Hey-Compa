@@ -4,6 +4,7 @@ from flask_login import login_required,current_user
 from uuid import uuid4
 from werkzeug.utils import secure_filename
 import os
+import time
 from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
 
 doc_routes = Blueprint('documents', __name__)
@@ -13,7 +14,7 @@ doc_routes = Blueprint('documents', __name__)
 @login_required
 def submit_document_from_image():
     user_id = current_user.id
-    image = request.files.get('image')  # expects multipart/form-data
+    image = request.files.get('image')  # expects multipart/form-data  
 
     if not user_id or not image:
         return jsonify({'error': 'user_id and image are required'}), 400

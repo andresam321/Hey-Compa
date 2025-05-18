@@ -155,7 +155,7 @@ def repeat_step(vendor):
         "stuck_count": progress.stuck_count
     }), 200
 
-#untested
+#semi-tested
 @guide_progress_routes.route('/progress/<vendor>', methods=['GET'])
 @login_required
 def get_guide_progress(vendor):

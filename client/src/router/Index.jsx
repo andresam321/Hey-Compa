@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
-import LoginFormModal from '../components/LoginFormModal/LoginFormModal';
+import ChatWindow from '../components/Chat/ChatWindow';
 
 export const router = createBrowserRouter([
   {
@@ -8,7 +8,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Home</div>,
+        element: <ChatWindow />,
       },
 
     ],

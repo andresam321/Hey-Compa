@@ -3,7 +3,7 @@ import { useModal } from "../../context/Modal";
 import { useSelector } from 'react-redux';
 // import { useDispatch } from "react-redux";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
-import "./Navigation.css";
+import "../Styles/Navigation.css";
 
 function Navigation() {
 // const dispatch = useDispatch();

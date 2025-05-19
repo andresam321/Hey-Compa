@@ -1,10 +1,23 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+import { RouterProvider } from "react-router-dom";
+import configureStore from "./redux/store";
+import { router } from "./router/Index";
+import * as sessionActions from "./redux/session";
+import "./index.css";
+
+const store = configureStore();
+
+if (import.meta.env.MODE !== "production") {
+  window.store = store;
+  window.sessionActions = sessionActions;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <ReduxProvider store={store}>
+      <RouterProvider router={router} />
+    </ReduxProvider>
+  </React.StrictMode>
+);

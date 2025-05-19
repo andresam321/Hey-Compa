@@ -26,8 +26,8 @@ def create_app(config_class=Config):
     db.init_app(app)
     Migrate(app, db)
     # Application Security
-    # csrf = CSRFProtect()
-    # csrf.init_app(app)
+    csrf = CSRFProtect()
+    csrf.init_app(app)
     CORS(app, supports_credentials=True)
     app.cli.add_command(seed_commands)
 

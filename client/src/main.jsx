@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
+import { Provider } from "react-redux";   
 import { RouterProvider } from "react-router-dom";
 import configureStore from "./redux/store";
 import { router } from "./router/Index";
@@ -16,8 +16,9 @@ if (import.meta.env.MODE !== "production") {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ReduxProvider store={store}>
+    <Provider store={store}>
       <RouterProvider router={router} />
-    </ReduxProvider>
+    </Provider>
   </React.StrictMode>
 );
+

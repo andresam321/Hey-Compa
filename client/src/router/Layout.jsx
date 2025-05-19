@@ -9,6 +9,7 @@ import './Layout.css'; // Import the CSS for layout
 export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+console.log("Layout loaded", isLoaded);
 
   useEffect(() => {
     dispatch(thunkAuthenticate()).then(() => setIsLoaded(true));
@@ -20,9 +21,9 @@ export default function Layout() {
         <Navigation />
         <div className="content-container">
           {isLoaded && <Outlet />}
+          {/* <Outlet /> */}
           <Modal />
         </div>
-        <Footer />
       </ModalProvider>
     </div>
   );

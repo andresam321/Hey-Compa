@@ -14,13 +14,21 @@ Hey-Compa is your friendly backend assistant designed to help users (especially 
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack  (Backend)
 
 - Python + Flask
 - Flask-Login, SQLAlchemy, Flask-Migrate
 - PaddleOCR (replacing pytesseract)
 - PostgreSQL or SQLite
 - JSON-based learning model via `PaymentGuide`
+
+
+## ⚙️ Tech Stack (Frontend)
+
+- React (with Vite)
+- Redux Toolkit for state management
+- Tailwind CSS for styling
+- React Router DOM for routing
 
 ---
 
@@ -52,6 +60,7 @@ Hey-Compa/
 │   │   └── ocr_utils.py
 │   │   └── test_ocr_standalone.py
 │   ├── services/
+├── client/
 ├── run.py
 ├── config.py
 ├── requirements.txt

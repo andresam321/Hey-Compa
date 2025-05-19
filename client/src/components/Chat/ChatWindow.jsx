@@ -14,7 +14,6 @@ const ChatWindow = () => {
             <h1>Hey</h1>
             <h2>Compa {user.firstname} 👋</h2>
           </div>
-
           <div className="chat-messages">
             <div className="message compa"></div>
             <div className="message user"></div>

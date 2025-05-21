@@ -10,7 +10,7 @@ from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extr
 doc_routes = Blueprint('documents', __name__)
 
 #tested
-@doc_routes.route('/image', methods=['POST'])
+@doc_routes.route('/image/upload', methods=['POST'])
 @login_required
 def submit_document_from_image():
     user_id = current_user.id

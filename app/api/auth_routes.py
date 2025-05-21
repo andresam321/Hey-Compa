@@ -22,7 +22,6 @@ def login():
     password = data.get('password')
 
     user = User.query.filter_by(email=email).first()
-
     if user and user.check_password(password):
         login_user(user)
         return user.to_dict()

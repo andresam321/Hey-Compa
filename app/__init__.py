@@ -13,6 +13,7 @@ from .api.payment_guide_routes import payment_guide_routes
 from .api.guide_progress import guide_progress_routes
 from .api.auth_routes import auth_routes
 from .models.user import User
+from app.extensions import csrf
 
 login = LoginManager() 
 
@@ -26,7 +27,6 @@ def create_app(config_class=Config):
     db.init_app(app)
     Migrate(app, db)
     # Application Security
-    csrf = CSRFProtect()
     csrf.init_app(app)
     CORS(app, supports_credentials=True)
     app.cli.add_command(seed_commands)

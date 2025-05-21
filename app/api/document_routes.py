@@ -27,7 +27,8 @@ def submit_document_from_image():
     temp_path = os.path.join("app/uploads", filename)
     image.save(temp_path)
     print("Saved image to:", temp_path)
-    
+    print("REQUEST METHOD:", request.method)
+    print("FILES:", request.files)
     if not ext.lower() in [".png", ".jpg", ".jpeg", ".webp"]:
         return jsonify({"error": "Unsupported image format"}), 400
 
@@ -97,4 +98,7 @@ def submit_document_from_image():
         import traceback
         traceback.print_exc()
         return jsonify({'error': f'Failed to process image: {str(e)}'}), 500
-      
+    
+@doc_routes.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({'pong': True})

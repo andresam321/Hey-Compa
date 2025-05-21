@@ -1,5 +1,7 @@
 import {useState} from "react";
 import { useSelector } from "react-redux";
+import UploadImage from "../Documents/UploadImage";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 const ChatWindow = () => {
   const user = useSelector((state) => state.session.user);
@@ -30,21 +32,13 @@ const handleFileUpload = (e) => {
 
         {/* Input */}
         <div className="flex items-center justify-between gap-4">
-          <label className="flex-1 bg-white border border-gray-300 rounded-full px-4 py-2 cursor-pointer hover:bg-gray-50 text-gray-600">
-            📎 Upload a bill
-            <input
-              type="file"
-              accept="image/*,application/pdf"
-              onChange={handleFileUpload}
-              className="hidden"
+          <div>
+            <OpenModalButton
+                buttonText={"Upload Image"}
+                className="view-details-button"
+                modalComponent={<UploadImage />}
             />
-          </label>
-           <button
-            // onClick={handleUploadSubmit}
-            className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
-          >
-            Submit
-          </button>
+        </div>
         </div>
       </div>
     </div>

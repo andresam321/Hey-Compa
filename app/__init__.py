@@ -105,4 +105,11 @@ def create_app(config_class=Config):
     def not_found(e):
         return app.send_static_file('index.html')
 
+    @app.errorhandler(400)
+    def handle_csrf_error(e):
+        # Optional: limit to CSRF-related messages
+        if "The CSRF token is missing" in str(e) or "The CSRF token is invalid" in str(e):
+            print("🔥 CSRF Blocked Request:", e)
+        return {"error": str(e)}, 400
+    
     return app

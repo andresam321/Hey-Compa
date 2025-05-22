@@ -39,6 +39,9 @@ const UploadImage = () => {
     try {
       const uploadedImage = await dispatch(thunkUploadImage(formData));
       console.log("Uploaded Image:", uploadedImage);
+      setImage(null);
+      setShowImage(null);
+      setFileName("");
       // Handle success (e.g., show a success message or navigate)
     } catch (error) {
       console.error("Error uploading image:", error);

@@ -20,22 +20,23 @@ export function getCookie(name) {
   }
   
   // 📡 Wrapper function around fetch to automatically include CSRF protection
-  export async function fetchWithCSRF(url, options = {}) {
-    // 🔑 Grab the csrf_token from the browser cookies
-    const csrfToken = getCookie("csrf_token");
-  
-    // 🧪 Merge user-provided headers with our default headers
-    const headers = {
-      ...options.headers,
-      "Content-Type": "application/json", // 🏷️ Tell server we're sending JSON
-      "X-CSRFToken": csrfToken,           // 🛡️ Send CSRF token to Flask
-    };
-  
-    // 🚀 Make the actual request with all options + credentials
-    return fetch(url, {
-      ...options,             // 📦 Keep any method/body/etc. the caller passed in
-      headers,                // ✅ Add our custom headers (with CSRF)
-      credentials: "include", // 🍪 Ensure cookies are included in the request (important!)
-    });
-  }
+ export async function fetchWithCSRF(url, options = {}) {
+  const csrfToken = getCookie("csrf_token");
+
+  const isFormData = options.body instanceof FormData;
+
+  const headers = {
+    ...options.headers,
+    ...(isFormData
+      ? {} // Don't set Content-Type for FormData
+      : { "Content-Type": "application/json" }),
+    "X-CSRFToken": csrfToken,
+  };
+
+  return fetch(url, {
+    ...options,
+    headers,
+    credentials: "include",
+  });
+}
   

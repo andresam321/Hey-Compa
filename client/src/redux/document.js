@@ -1,4 +1,4 @@
-import { fetchFile } from "../utils/fetchFile";
+import { fetchWithCSRF } from "../utils/fetchWithCSRF";
 const DOCUMENT_UPLOAD_IMAGE = 'documentUploadImage/DOCUMENT_UPLOAD_IMAGE';
 
 
@@ -15,7 +15,7 @@ const docUploadImage = (image) => ({
 
 export const thunkUploadImage = (image) => async (dispatch) => {
   try {
-    const res = await fetch("/api/documents/image/upload", {
+    const res = await fetchWithCSRF("/api/documents/image/upload", {
       method: "POST",
       body: image,
       // credentials: "include", // if you're using session auth

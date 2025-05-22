@@ -30,7 +30,7 @@ def start_guide(vendor):
     # if incomplete and (datetime.utcnow() - incomplete.created_at).total_seconds() < 7200:
     #     return resume_session_response(incomplete)
     
-    guide = PaymentGuide.query.filter(PaymentGuide.vendor_name.ilike(vendor.strip())).first()
+    guide = PaymentGuide.query.filter(PaymentGuide.user_id == current_user.id,PaymentGuide.vendor_name.ilike(vendor.strip())).first()
     if not guide:
         print("❌ Payment guide not found")
         return jsonify({"error": "Payment guide not found for this vendor"}), 404
@@ -63,7 +63,7 @@ def next_step(vendor):
     user_id = current_user.id
     # normalized_vendor = vendor.strip().lower()
     
-    guide = PaymentGuide.query.filter(PaymentGuide.vendor_name.ilike(vendor.strip())).first()
+    guide = PaymentGuide.query.filter(PaymentGuide.user_id == current_user.id, PaymentGuide.vendor_name.ilike(vendor.strip())).first()
     guide_progress = GuideProgress.query.filter_by(user_id=user_id, vendor_name=vendor).first()
     if guide_progress.is_complete:
         guide_progress.current_step = 0
@@ -110,7 +110,7 @@ def repeat_step(vendor):
     vendor = vendor.strip()
 
     # Fetch guide and progress
-    guide = PaymentGuide.query.filter(PaymentGuide.vendor_name.ilike(vendor.strip())).first()
+    guide = PaymentGuide.query.filter(PaymentGuide.user_id == current_user.id, PaymentGuide.vendor_name.ilike(vendor.strip())).first()
     progress = GuideProgress.query.filter_by(user_id=user_id, vendor_name=vendor).first()
 
     if progress.current_step >= len(guide.step_texts):
@@ -166,7 +166,7 @@ def get_guide_progress(vendor):
     vendor = vendor.strip()
 
     # Fetch guide and progress
-    payment_guide = PaymentGuide.query.filter(PaymentGuide.vendor_name.ilike(vendor)).first()
+    payment_guide = PaymentGuide.query.filter(PaymentGuide.user_id == current_user.id, PaymentGuide.vendor_name.ilike(vendor)).first()
     progress = GuideProgress.query.filter_by(user_id=user_id, vendor_name=vendor).first()
 
     if not payment_guide or not progress:

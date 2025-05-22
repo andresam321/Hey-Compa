@@ -15,7 +15,7 @@ def get_or_generate_guide(vendor):
     
     normalized_vendor = vendor.strip().lower()
 
-    guide = PaymentGuide.query.filter_by(vendor_name=normalized_vendor, user_id=user_id).first()
+    guide = PaymentGuide.query.filter_by(PaymentGuide.user_id == current_user.id, vendor_name=normalized_vendor, user_id=user_id).first()
     if guide:
         return jsonify({
             'vendor_name': guide.vendor_name,

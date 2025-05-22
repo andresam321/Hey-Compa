@@ -8,10 +8,14 @@ import {
 import { thunk } from 'redux-thunk';
 
 import sessionReducer from "./session";
+import documentReducer from "./document";
+import paymentGuideReducer from "./paymentGuide";
 
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  document: documentReducer,
+  paymentGuide: paymentGuideReducer,
     // Add other reducers here
 });
 

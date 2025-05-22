@@ -7,6 +7,7 @@ from paddleocr import PaddleOCR
 import numpy as np
 from PIL import Image
 import re
+from app.utils.ocr_helpers import run_paddle_ocr
 
 # ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=True)
 
@@ -55,48 +56,18 @@ vendor_keywords = {
 
 #loads ocr engine once at module level, lang = language 'english
 #use_angle_cls=True helps detect rotated text (e.g., slanted/tilted labels).
-ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False)
-  # Load once at module level
 
 def extract_image_text(image_path):
-    #opens image and coverts to red, green, blue supported by OCR
-    img = Image.open(image_path).convert("RGB")
-
-    # Enhance image to improve OCR accuracy/contrast
-    enhancer = ImageEnhance.Contrast(img)
-    img = enhancer.enhance(3.0)
-    #upscales image to improve OCR accuracy, on smaller text its harder to detect
-    img = img.resize((img.width * 2, img.height * 2))
-
-    #this call ocr engine
-    img_np = np.array(img)
-
-    #format a list of entries like [[[[box, text_info], ...], ...]]
-    # where box is a list of coordinates and text_info is a tuple (text, confidence)
-    result = ocr.ocr(img_np, cls=True)
-    print(" RAW OCR RESULT:", result)
-
-    # returns none if no text is detected
+    result = run_paddle_ocr(image_path)
     if not result or not result[0]:
         return ""
-
-
     lines = []
-    #iterate through the result to extract text and confidence
-    #result[0] is a list of detected text lines
-    #each line is a list of boxes and text_info
-    #text_info is a tuple (text, confidence)
     for line in result[0]:
         if isinstance(line, list) and len(line) == 2:
             box, text_info = line
             if isinstance(text_info, tuple) and len(text_info) == 2:
-                text, confidence = text_info
+                text, _ = text_info
                 lines.append(text)
-            else:
-                print("Skipped malformed text_info:", text_info)
-        else:
-            print("Skipped malformed line:", line)
-
     return "\n".join(lines)
 
 #uses regex to find the due date in the text

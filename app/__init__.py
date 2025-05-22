@@ -13,6 +13,7 @@ from .api.payment_guide_routes import payment_guide_routes
 from .api.guide_progress import guide_progress_routes
 from .api.auth_routes import auth_routes
 from .models.user import User
+from app.extensions import csrf
 
 login = LoginManager() 
 
@@ -26,7 +27,6 @@ def create_app(config_class=Config):
     db.init_app(app)
     Migrate(app, db)
     # Application Security
-    csrf = CSRFProtect()
     csrf.init_app(app)
     CORS(app, supports_credentials=True)
     app.cli.add_command(seed_commands)
@@ -105,4 +105,11 @@ def create_app(config_class=Config):
     def not_found(e):
         return app.send_static_file('index.html')
 
+    @app.errorhandler(400)
+    def handle_csrf_error(e):
+        # Optional: limit to CSRF-related messages
+        if "The CSRF token is missing" in str(e) or "The CSRF token is invalid" in str(e):
+            print("🔥 CSRF Blocked Request:", e)
+        return {"error": str(e)}, 400
+    
     return app

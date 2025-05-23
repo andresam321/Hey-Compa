@@ -1,6 +1,7 @@
 import {useState} from "react";
 import { useSelector } from "react-redux";
 import UploadImage from "../Documents/UploadImage";
+import StartOcrSteps from "../GuideSteps/StartOcrSteps";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 const ChatWindow = () => {
@@ -32,12 +33,15 @@ const handleFileUpload = (e) => {
 
         {/* Input */}
         <div className="flex items-center justify-between gap-4">
-          <div>
-            <OpenModalButton
-                buttonText={"Upload Image"}
-                className="view-details-button"
-                modalComponent={<UploadImage />}
-            />
+          <div className="view-details-button">
+           <button>
+            <UploadImage />
+           </button>
+        </div>
+        <div className="view-details-button">
+           <button>
+            <StartOcrSteps />
+           </button>
         </div>
         </div>
       </div>

@@ -3,7 +3,6 @@ from PIL import Image, ImageEnhance, ImageFilter
 import re 
 import dateparser
 from thefuzz import process, fuzz
-from paddleocr import PaddleOCR
 import numpy as np
 from PIL import Image
 import re

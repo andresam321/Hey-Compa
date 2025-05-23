@@ -40,14 +40,12 @@ export const thunkUploadImage = (image) => async (dispatch) => {
 
 function documentReducer(state = {}, action) {
   switch (action.type) {
-    case DOCUMENT_UPLOAD_IMAGE:{
+    case DOCUMENT_UPLOAD_IMAGE: {
       console.log("Image upload action:", action);
-      console.log("Image upload state:", state);
-      console.log("Image upload payload:", action.payload);
-      const newState = { ...state };
-            newState[action.payload.id] = action.payload
-            return newState
-        }
+      return {
+        ...action.payload  
+      };
+    }
 
     default:
       return state;

@@ -10,12 +10,14 @@ import { thunk } from 'redux-thunk';
 import sessionReducer from "./session";
 import documentReducer from "./document";
 import paymentGuideReducer from "./paymentGuide";
+import guideProgressReducer from "./guideProgress";
 
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   document: documentReducer,
   paymentGuide: paymentGuideReducer,
+  guideProgress: guideProgressReducer,
     // Add other reducers here
 });
 

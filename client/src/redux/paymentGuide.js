@@ -9,7 +9,8 @@ const getPaymentGuide = (paymentGuide) => ({
 
 export const thunkGetPaymentGuide = (vendor) => async (dispatch) => {
     try {
-    const res = await fetchWithCSRF(`/api/guide_progress/start/${vendor}`)   
+    const encodedVendor = encodeURIComponent(vendor);
+    const res = await fetchWithCSRF(`/api/payment_guide/${encodedVendor}`);
     if (!res.ok) {
         throw new Error("Failed to fetch payment guide");
     }

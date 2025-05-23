@@ -15,7 +15,7 @@ doc_routes = Blueprint('documents', __name__)
 @login_required
 def submit_document_from_image():
     form = DocumentForm()
-
+    print("Form data:",form)
     form["csrf_token"].data = request.cookies.get("csrf_token")
 
     if not form.validate_on_submit():

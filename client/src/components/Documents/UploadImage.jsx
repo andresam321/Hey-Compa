@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { thunkUploadImage } from '../../redux/document'
+import StartOcrSteps from '../GuideSteps/StartOcrSteps'
 
 const UploadImage = () => {
   const navigate = useDispatch();
@@ -10,7 +11,9 @@ const UploadImage = () => {
   const [showImage, setShowImage] = useState();
   const [error, setError] = useState({});
   const [fileName, setFileName] = useState("");
-  
+
+  const vendor = useSelector((state) => state.document?.vendor_detected)
+  console.log("vendor line 16:", vendor);
   const handleFileChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
@@ -77,6 +80,11 @@ const UploadImage = () => {
             Submit
           </button>
         </form>
+        {vendor && (
+          <div className="mt-6">
+            <StartOcrSteps vendor={vendor} />
+          </div>
+        )}
       </div>
     </div>
   )

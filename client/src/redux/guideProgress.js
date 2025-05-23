@@ -11,7 +11,10 @@ const startGuideStep = (guide) => ({
 });
 const nextStepGuide = (guide) => ({
   type: NEXT_STEP_GUIDE,
-  payload: guide,
+  payload: {
+    guide_progress: guide.guide_progress,
+    payment_guide: guide.payment_guide,
+  }
 });
 const repeatStuckGuide = (guide) => ({
   type: REPEAT_STUCK_GUIDE,
@@ -47,14 +50,18 @@ export const thunkStartGuideStep = (vendor) => async (dispatch) => {
 //dispatch thunk to get next step guide progress
 export const thunkNextStepGuide = (vendor) => async (dispatch) => {
   try {
-    const res = await fetchWithCSRF(`/api/guide_progress/next/${vendor}`);
+    const encodedVendor = encodeURIComponent(vendor);
+    const res = await fetchWithCSRF(`/api/guide_progress/next/${encodedVendor}`, {
+      method: "POST",});
     if (!res.ok) {
       throw new Error("Failed to fetch guide step progress");
     }
     const data = await res.json();
+    console.log("Payload before dispatch:", data);
     if (data.error) {
       throw new Error(data.error);
     }
+    console.log("Payload before dispatch:", data);
     dispatch(nextStepGuide(data));
     return data;
   } catch (error) {

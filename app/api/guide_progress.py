@@ -53,51 +53,62 @@ def start_guide(vendor):
 @guide_progress_routes.route('/next/<vendor>', methods=['POST'])
 @login_required
 def next_step(vendor):
-
-    """
-    Move to the next step in the guide for the given vendor.
-    """
     user_id = current_user.id
-    # normalized_vendor = vendor.strip().lower()
-    
-    guide = PaymentGuide.query.filter(PaymentGuide.user_id == current_user.id, PaymentGuide.vendor_name.ilike(vendor.strip())).first()
-    guide_progress = GuideProgress.query.filter_by(user_id=user_id, vendor_name=vendor).first()
+
+    guide = PaymentGuide.query.filter(
+        PaymentGuide.user_id == user_id,
+        PaymentGuide.vendor_name.ilike(vendor.strip())
+    ).first()
+
+    guide_progress = GuideProgress.query.filter_by(
+        user_id=user_id,
+        vendor_name=vendor
+    ).first()
+
+    if not guide_progress or not guide:
+        return jsonify({"error": "Guide or progress not found"}), 404
+
+    step_texts = guide.step_texts or []
+    total_steps = len(step_texts)
+
+    # Restart if guide was completed
     if guide_progress.is_complete:
         guide_progress.current_step = 0
         guide_progress.is_complete = False
         guide_progress.stuck_count = 0
         db.session.commit()
-        
+
         return jsonify({
             "message": "Guide was complete. Starting over from Step 1.",
-            "progress": guide_progress.to_dict(),
-            "current_instruction": guide.step_texts[0] if guide.step_texts else "No step found"
-        }), 200       
+            "guide_progress": guide_progress.to_dict(),
+            "payment_guide": guide.to_dict(),
+            "current_instruction": step_texts[0] if step_texts else "No steps available",
+            "total_steps": total_steps,
+            "is_complete": False
+        }), 200
 
-    if not guide_progress or not guide:
-        return jsonify({"error": "Guide or progress not found"}), 404
-
-    # Increment the current step
-    guide_progress.current_step += 1
-
-    # Check if the guide is complete
-   
-    if guide and guide_progress.current_step >= len(guide.step_texts):
+    # Only increment if not at last step
+    if guide_progress.current_step < total_steps - 1:
+        guide_progress.current_step += 1
+    else:
         guide_progress.is_complete = True
 
     db.session.commit()
-    step_index = guide_progress.current_step
 
-# Handle out-of-bounds safety
-    step_texts = guide.step_texts or []
-    current_instruction = (step_texts[step_index] if 0 <= step_index < len(step_texts) else "All steps completed")
+    step_index = guide_progress.current_step
+    current_instruction = (
+        step_texts[step_index] if 0 <= step_index < total_steps
+        else "All steps completed"
+    )
 
     return jsonify({
-    "progress": guide_progress.to_dict(),
-    "current_instruction": current_instruction,
-    "total_steps": len(step_texts),
-    "is_complete": guide_progress.is_complete
-}), 200
+        "progress": guide_progress.to_dict(),
+        "current_instruction": current_instruction,
+        "payment_guide": guide.to_dict(),
+        "total_steps": total_steps,
+        "is_complete": guide_progress.is_complete
+    }), 200
+
 
 #tested
 @guide_progress_routes.route('/repeat/<vendor>', methods=['POST'])

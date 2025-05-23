@@ -38,11 +38,6 @@ const handleFileUpload = (e) => {
             <UploadImage />
            </button>
         </div>
-        <div className="view-details-button">
-           <button>
-            <StartOcrSteps />
-           </button>
-        </div>
         </div>
       </div>
     </div>

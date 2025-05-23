@@ -15,22 +15,15 @@ def start_guide(vendor):
     user_id = current_user.id
     print("Current user ID:", user_id)
 
-    # normalized_vendor = vendor.strip().lower()
+    normalized_vendor = vendor.strip().lower()
 
-    # Check if guide progress already exists
-    # existing_progress = GuideProgress.query.filter_by(user_id=user_id, vendor_name=normalized_vendor).first()
-    # if existing_progress:
-    #     return jsonify({"error": "Guide already exists"}), 400
-
-    # # Fetch the payment guide for the user
-    # print(f"[DEBUG] Looking for guide: user_id={user_id}, vendor_name={repr(vendor)}")
-
-
-    # incomplete = GuideProgress.query.filter(GuideProgress.vendor_name, is_complete = False).order_by(GuideProgress.created_at.desc()).first()
-    # if incomplete and (datetime.utcnow() - incomplete.created_at).total_seconds() < 7200:
-    #     return resume_session_response(incomplete)
+    guide = PaymentGuide.query.filter(
+        PaymentGuide.user_id == user_id,
+        db.func.lower(PaymentGuide.vendor_name) == normalized_vendor
+    ).first()
     
-    guide = PaymentGuide.query.filter(PaymentGuide.user_id == current_user.id,PaymentGuide.vendor_name.ilike(vendor.strip())).first()
+    # guide = PaymentGuide.query.filter(PaymentGuide.user_id == user_id,PaymentGuide.vendor_name.ilike(vendor.strip())).first()
+
     if not guide:
         print("❌ Payment guide not found")
         return jsonify({"error": "Payment guide not found for this vendor"}), 404
@@ -50,7 +43,11 @@ def start_guide(vendor):
     db.session.add(new_guide_progress)
     db.session.commit()
 
-    return jsonify(new_guide_progress.to_dict()), 201
+    return jsonify({
+        "guide_progress": new_guide_progress.to_dict(),
+        "payment_guide": guide.to_dict()
+    }), 201
+
 
 #tested
 @guide_progress_routes.route('/next/<vendor>', methods=['POST'])

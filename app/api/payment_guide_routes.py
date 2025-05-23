@@ -15,7 +15,10 @@ def get_or_generate_guide(vendor):
     
     normalized_vendor = vendor.strip().lower()
 
-    guide = PaymentGuide.query.filter_by(PaymentGuide.user_id == current_user.id, vendor_name=normalized_vendor, user_id=user_id).first()
+    guide = PaymentGuide.query.filter(
+        PaymentGuide.user_id == user_id,
+        db.func.lower(PaymentGuide.vendor_name) == normalized_vendor
+    ).first()
     if guide:
         return jsonify({
             'vendor_name': guide.vendor_name,
@@ -25,7 +28,7 @@ def get_or_generate_guide(vendor):
         }), 200
     
     document = Document.query.filter_by(user_id=user_id,vendor_detected=normalized_vendor).order_by(Document.created_at.desc()).first()
-    document = Document.query.filter_by(user_id=user_id, vendor_detected=vendor).order_by(Document.created_at.desc()).first()
+    # document = Document.query.filter_by(user_id=user_id, vendor_detected=vendor).order_by(Document.created_at.desc()).first()
 
     if not document:
         return jsonify({

@@ -21,7 +21,14 @@ const repeatStuckGuide = (guide) => ({
 //dispatch thunk to get guide step progress
 export const thunkStartGuideStep = (vendor) => async (dispatch) => {
   try {
-    const res = await fetchWithCSRF(`/api/guide_progress/start/${vendor}`);
+    const encodedVendor = encodeURIComponent(vendor);
+    const res = await fetchWithCSRF(`/api/guide_progress/start/${encodedVendor}` , {
+      method: "POST",
+      // body: JSON.stringify({ vendor }),
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+    });
     if (!res.ok) {
       throw new Error("Failed to fetch guide step progress");
     }

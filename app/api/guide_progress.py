@@ -9,7 +9,7 @@ from datetime import datetime
 guide_progress_routes = Blueprint('guide_progress', __name__)
 
 # tested
-@guide_progress_routes.route('/start/<vendor>', methods=['GET'])
+@guide_progress_routes.route('/start/<vendor>', methods=['POST'])
 @login_required
 def start_guide(vendor):
     user_id = current_user.id

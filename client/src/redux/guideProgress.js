@@ -14,6 +14,8 @@ const nextStepGuide = (guide) => ({
   payload: {
     guide_progress: guide.guide_progress,
     payment_guide: guide.payment_guide,
+    current_instruction: guide.current_instruction,
+    is_complete: guide.is_complete,
   }
 });
 const repeatStuckGuide = (guide) => ({
@@ -62,7 +64,12 @@ export const thunkNextStepGuide = (vendor) => async (dispatch) => {
       throw new Error(data.error);
     }
     console.log("Payload before dispatch:", data);
-    dispatch(nextStepGuide(data));
+    dispatch(nextStepGuide({
+      guide_progress: data.guide_progress,
+      payment_guide: data.payment_guide,
+      current_instruction: data.current_instruction,
+      is_complete: data.is_complete
+    }));
     return data;
   } catch (error) {
     console.error("Error fetching guide step progress:", error);
@@ -101,9 +108,16 @@ function guideProgressReducer(state = {}, action) {
         guideStep: action.payload,
       };
     case NEXT_STEP_GUIDE:
+    console.log("Reducer HIT: NEXT_STEP_GUIDE");
+    console.log("Payload received in reducer:", action.payload);
       return {
         ...state,
-        guideStep: action.payload,
+        guideStep: {
+          guide_progress: action.payload.guide_progress,
+          payment_guide: action.payload.payment_guide,
+          current_instruction: action.payload.current_instruction,
+          is_complete: action.payload.is_complete,
+        }
       };
     case REPEAT_STUCK_GUIDE:
       return {

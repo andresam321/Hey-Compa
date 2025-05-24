@@ -102,7 +102,7 @@ def next_step(vendor):
     )
 
     return jsonify({
-        "progress": guide_progress.to_dict(),
+        "guide_progress": guide_progress.to_dict(),
         "current_instruction": current_instruction,
         "payment_guide": guide.to_dict(),
         "total_steps": total_steps,

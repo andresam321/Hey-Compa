@@ -1,10 +1,16 @@
 import { useDispatch, useSelector } from "react-redux"
 import { thunkNextStepGuide } from "../../redux/guideProgress"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 const NextStep = ({ skipFirstStep }) => {
   const dispatch = useDispatch()
+  const [hasStarted, setHasStarted] = useState(false)
+  const guideStepState = useSelector((state) => state.guideProgress.guideStep.current_instruction);
+console.log("🧠 Full guideStep state:", guideStepState);
 
+  const instruction = useSelector(
+  (state) => state.guideProgress.guideStep.current_instruction)
+  console.log("currentInstruction:", instruction)
   const guideData = useSelector((state) => state.guideProgress?.guideStep);
   console.log("guideData:", guideData);
   const vendor = guideData?.guide_progress?.vendor_name;
@@ -24,6 +30,7 @@ const NextStep = ({ skipFirstStep }) => {
         console.error("No vendor detected.");
         return;
       }
+      setHasStarted(true);
       await dispatch(thunkNextStepGuide(vendor));
       // console.log("Next step fetched successfully for vendor:", vendor);
       // console.log("Current step index after fetching next step:", currentStepIndex);
@@ -40,6 +47,7 @@ useEffect(() => {
   const isLastStep = currentStepIndex >= stepTexts.length - 1;
   console.log("isLastStep:", isLastStep);
   return (
+    
     <div className="text-center bg-white p-6 rounded shadow max-w-md w-full">
       <p className="text-gray-700 font-semibold text-lg">
         Step {currentStepIndex + 1} of {stepTexts.length}

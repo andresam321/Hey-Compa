@@ -35,13 +35,17 @@ const StartOcrSteps = () => {
     <div className="flex flex-col items-center justify-center h-screen">
       {/* <h1 className="text-2xl font-bold text-gray-800">Start OCR Steps</h1> */}
 
-      {hasStarted && guideSteps?.length > 0 && currentStep === 0 && (
+      {hasStarted && guideSteps?.length > 0 && (
         <>
           <div className="mt-4 bg-white p-4 rounded shadow-md w-full max-w-md text-center">
-            <p className="text-lg text-gray-700 font-medium">Step 1:</p>
-            <p className="text-gray-600 mt-2">{guideSteps[0]}</p>
+            <p className="text-lg text-gray-700 font-medium">
+              Step {currentStep + 1}:
+            </p>
+            <p className="text-gray-600 mt-2">
+              {guideSteps[currentStep]}
+            </p>
           </div>
-          <NextStep  />
+          <NextStep />
         </>
       )}
 

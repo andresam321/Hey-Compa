@@ -80,13 +80,17 @@ const UploadImage = () => {
             Submit
           </button>
         </form>
-        {vendor && (
-          <div className="mt-6">
-            <StartOcrSteps vendor={vendor} />
+          <div>
+            {vendor && (
+              <div className="mt-6">
+                <StartOcrSteps vendor={vendor} />
+       
+        
           </div>
         )}
       </div>
     </div>
+  </div>
   )
 }
 

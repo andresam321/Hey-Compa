@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { thunkUploadImage } from '../../redux/document'
 import StartOcrSteps from '../GuideSteps/StartOcrSteps'
 
-const UploadImage = () => {
+const UploadImage = ({setVendor}) => {
   const navigate = useDispatch();
   const dispatch = useDispatch();
   const [image, setImage] = useState();
@@ -51,6 +51,9 @@ const UploadImage = () => {
       setError({ image: "Image upload failed. Please try again." });
     }
   }
+  if (vendor) {
+  setVendor(vendor);
+}
 
   return (
     <div>
@@ -80,15 +83,15 @@ const UploadImage = () => {
             Submit
           </button>
         </form>
-          <div>
+          {/* <div>
             {vendor && (
               <div className="mt-6">
                 <StartOcrSteps vendor={vendor} />
-       
+                
         
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   </div>
   )

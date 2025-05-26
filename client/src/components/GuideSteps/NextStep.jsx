@@ -2,18 +2,17 @@ import { useDispatch, useSelector } from "react-redux"
 import { thunkNextStepGuide } from "../../redux/guideProgress"
 import { useEffect, useState } from "react"
 
-const NextStep = ({ skipFirstStep }) => {
+const NextStep = ({ vendor }) => {
   const dispatch = useDispatch()
   const [hasStarted, setHasStarted] = useState(false)
-  const guideStepState = useSelector((state) => state.guideProgress.guideStep.current_instruction);
-console.log("🧠 Full guideStep state:", guideStepState);
+//   const guideStepState = useSelector((state) => state.guideProgress.guideStep.current_instruction);
+// console.log("🧠 Full guideStep state:", guideStepState);
 
-  const instruction = useSelector(
-  (state) => state.guideProgress.guideStep.current_instruction)
-  console.log("currentInstruction:", instruction)
+  const currentInstruction = useSelector((state) => state.guideProgress.guideStep.current_instruction)
+  // console.log("currentInstruction:", currentInstruction)
   const guideData = useSelector((state) => state.guideProgress?.guideStep);
   console.log("guideData:", guideData);
-  const vendor = guideData?.guide_progress?.vendor_name;
+  // const vendor = guideData?.guide_progress?.vendor_name;
   console.log("vendor:", vendor);
   const currentStepIndex = guideData?.guide_progress?.current_step;
   console.log("currentStepIndex:", currentStepIndex);
@@ -45,7 +44,7 @@ useEffect(() => {
 
 
   const isLastStep = currentStepIndex >= stepTexts.length - 1;
-  console.log("isLastStep:", isLastStep);
+  // console.log("isLastStep:", isLastStep);
   return (
     
     <div className="text-center bg-white p-6 rounded shadow max-w-md w-full">
@@ -53,7 +52,7 @@ useEffect(() => {
         Step {currentStepIndex + 1} of {stepTexts.length}
       </p>
       <p className="mt-2 text-gray-600 text-lg italic">
-        {stepTexts[currentStepIndex]}
+        {currentInstruction}
       </p>
 
       {!isComplete ? (

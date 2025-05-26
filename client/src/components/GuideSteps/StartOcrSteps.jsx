@@ -3,61 +3,75 @@ import { useSelector, useDispatch } from 'react-redux';
 import { thunkStartGuideStep } from '../../redux/guideProgress';
 import { thunkGetPaymentGuide } from '../../redux/paymentGuide';
 import NextStep from './NextStep';
+import StuckHelp from './StuckHelp';
 
-const StartOcrSteps = () => {
+const StartOcrSteps = ({vendor}) => {
   const dispatch = useDispatch();
-  const vendorFromDoc = useSelector((state) => state.document?.vendor_detected);
+  console.log("vendor line 10:", vendor);
+  // const vendorFromDoc = useSelector((state) => state.document?.vendor_detected);
   const guideSteps = useSelector((state) => state.paymentGuide?.paymentGuide?.step_texts);
   const currentStep = useSelector((state) => state.guideProgress?.guideStep?.guide_progress?.current_step);
   console.log('currentStep:', currentStep);
   console.log('guideSteps:', guideSteps);
+  const currentInstruction = useSelector((state) => state?.guideProgress?.guideStep?.current_instruction)
+  console.log("currentInstruction line 15:", currentInstruction)
   const [hasStarted, setHasStarted] = useState(false); 
   const [skipFirstStep, setSkipFirstStep] = useState(false); // state to control skipping the first step
 
   const handleStartGuideSteps = async () => {
     try {
-      await dispatch(thunkStartGuideStep(vendorFromDoc));
-      console.log("Guide steps started successfully for vendor:", vendorFromDoc);
+      await dispatch(thunkStartGuideStep(vendor));
+      console.log("Guide steps started successfully for vendor:", vendor);
       // show the first step
       setHasStarted(true);
     } catch (error) {
       console.error("Error starting guide steps:", error);
     }
   };
+  
+  useEffect(() => {
+  if (vendor) {
+    dispatch(thunkStartGuideStep(vendor));
+    dispatch(thunkGetPaymentGuide(vendor));
+  }
+}, [dispatch, vendor]);
 
   useEffect(() => {
-    if (vendorFromDoc) {
-      dispatch(thunkGetPaymentGuide(vendorFromDoc)); // only preload the guide, not start progress yet
+    if (vendor) {
+      dispatch(thunkGetPaymentGuide(vendor)); // only preload the guide, not start progress yet
     }
-  }, [dispatch, vendorFromDoc]);
+  }, [dispatch, vendor]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      {/* <h1 className="text-2xl font-bold text-gray-800">Start OCR Steps</h1> */}
+    <div className="flex flex-col items-start space-y-4 mt-6">
 
-      {hasStarted && guideSteps?.length > 0 && (
-        <>
-          <div className="mt-4 bg-white p-4 rounded shadow-md w-full max-w-md text-center">
-            <p className="text-lg text-gray-700 font-medium">
-              Step {currentStep + 1}:
-            </p>
-            <p className="text-gray-600 mt-2">
-              {guideSteps[currentStep]}
-            </p>
-          </div>
-          <NextStep />
-        </>
+      {/* Button as user message */}
+      {!hasStarted && (
+        <div className="self-end max-w-[75%]">
+          <button
+            onClick={handleStartGuideSteps}
+            className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+          >
+            Start OCR Steps
+          </button>
+        </div>
       )}
 
-      <button
-        onClick={handleStartGuideSteps}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Start OCR Steps
-      </button>
+      {/* Display guide step like bot message */}
+      {hasStarted && guideSteps?.length > 0 && (
+        <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-3 max-w-[75%] self-start whitespace-pre-wrap">
+          <p className="text-sm font-semibold">Step {currentStep + 1}:</p>
+          <p className="text-sm mt-1">{guideSteps[currentStep]}</p>
 
+          <div className="mt-4">
+            <NextStep vendor={vendor} />
+            <StuckHelp vendor={vendor} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 
 export default StartOcrSteps;

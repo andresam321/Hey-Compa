@@ -6,6 +6,8 @@ import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 const ChatWindow = () => {
   const user = useSelector((state) => state.session.user);
+  const [vendor, setVendor] = useState(null);
+
   console.log("line7", user);
 
 const handleFileUpload = (e) => {
@@ -14,33 +16,33 @@ const handleFileUpload = (e) => {
 
 
   return (
-    <div className="max-h-screen w-full flex justify-center bg-gray-100 overflow-hidden">
-      <div className="flex flex-col w-full max-w-2xl px-4 py-6">
-        {/* Header */}
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Hey Compa {user?.firstname || "User"} 👋 </h1>
-          {/* <h2 className="text-lg text-gray-600">
-            Compa {user?.firstname || "User"} 👋
-          </h2> */}
-        </div>
+<div className="min-h-screen w-full bg-[#1e1e2f] flex justify-center">
+  <div className="w-full max-w-5xl flex flex-col px-6 py-8">
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4">
-          <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-2 max-w-[75%] self-start">
-            Need help with a bill? Try uploading it here!
-          </div>
-        </div>
-
-        {/* Input */}
-        <div className="flex items-center justify-between gap-4">
-          <div className="view-details-button">
-           <button>
-            <UploadImage />
-           </button>
-        </div>
-        </div>
-      </div>
+    {/* Header */}
+    <div className="mb-6 text-center">
+      <h1 className="text-3xl font-bold text-white">Hey Compa {user?.firstname || "User"} 👋</h1>
     </div>
+
+      <div className="flex-1 bg-white rounded-lg shadow-md p-6 overflow-y-auto space-y-4 mb-6 min-h-[400px]">
+      <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-2 max-w-[75%]">
+        Need help with a bill? Try uploading it here!
+      </div>
+
+      {vendor && (
+        <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-2 max-w-[75%] self-start">
+          <StartOcrSteps vendor={vendor} key={vendor} />
+        </div>
+      )}
+    </div>
+
+    <div className="...">
+      <UploadImage setVendor={setVendor} />
+    </div>
+
+
+  </div>
+</div>
   );
 };
 

@@ -80,7 +80,9 @@ export const thunkNextStepGuide = (vendor) => async (dispatch) => {
 //dispatch thunk to get repeat stuck guide progress (if stuck is hit 2 times in a row)
 export const thunkRepeatStuckGuide = (vendor) => async (dispatch) => {
   try {
-    const res = await fetchWithCSRF(`/api/guide_progress/repeat/${vendor}`);
+    const encodedVendor = encodeURIComponent(vendor);
+    const res = await fetchWithCSRF(`/api/guide_progress/repeat/${encodedVendor}`, {
+      method: "POST",});
     if (!res.ok) {
       throw new Error("Failed to fetch guide step progress");
     }

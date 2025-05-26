@@ -84,7 +84,7 @@ const UploadImage = () => {
             {vendor && (
               <div className="mt-6">
                 <StartOcrSteps vendor={vendor} />
-       
+                
         
           </div>
         )}

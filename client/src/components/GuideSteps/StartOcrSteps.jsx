@@ -3,21 +3,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { thunkStartGuideStep } from '../../redux/guideProgress';
 import { thunkGetPaymentGuide } from '../../redux/paymentGuide';
 import NextStep from './NextStep';
+import StuckHelp from './StuckHelp';
 
-const StartOcrSteps = () => {
+const StartOcrSteps = ({vendor}) => {
   const dispatch = useDispatch();
-  const vendorFromDoc = useSelector((state) => state.document?.vendor_detected);
+  console.log("vendor line 10:", vendor);
+  // const vendorFromDoc = useSelector((state) => state.document?.vendor_detected);
   const guideSteps = useSelector((state) => state.paymentGuide?.paymentGuide?.step_texts);
   const currentStep = useSelector((state) => state.guideProgress?.guideStep?.guide_progress?.current_step);
   console.log('currentStep:', currentStep);
   console.log('guideSteps:', guideSteps);
+  const currentInstruction = useSelector((state) => state?.guideProgress?.guideStep?.current_instruction)
+  console.log("currentInstruction line 15:", currentInstruction)
   const [hasStarted, setHasStarted] = useState(false); 
   const [skipFirstStep, setSkipFirstStep] = useState(false); // state to control skipping the first step
 
   const handleStartGuideSteps = async () => {
     try {
-      await dispatch(thunkStartGuideStep(vendorFromDoc));
-      console.log("Guide steps started successfully for vendor:", vendorFromDoc);
+      await dispatch(thunkStartGuideStep(vendor));
+      console.log("Guide steps started successfully for vendor:", vendor);
       // show the first step
       setHasStarted(true);
     } catch (error) {
@@ -26,10 +30,10 @@ const StartOcrSteps = () => {
   };
 
   useEffect(() => {
-    if (vendorFromDoc) {
-      dispatch(thunkGetPaymentGuide(vendorFromDoc)); // only preload the guide, not start progress yet
+    if (vendor) {
+      dispatch(thunkGetPaymentGuide(vendor)); // only preload the guide, not start progress yet
     }
-  }, [dispatch, vendorFromDoc]);
+  }, [dispatch, vendor]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -45,7 +49,10 @@ const StartOcrSteps = () => {
               {guideSteps[currentStep]}
             </p>
           </div>
-          <NextStep />
+        <div>
+          <NextStep vendor = {vendor} />
+          <StuckHelp vendor = {vendor} />
+          </div>
         </>
       )}
 

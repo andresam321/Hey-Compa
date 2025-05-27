@@ -9,6 +9,8 @@ const StartOcrSteps = ({vendor}) => {
   const dispatch = useDispatch();
   console.log("vendor line 10:", vendor);
   // const vendorFromDoc = useSelector((state) => state.document?.vendor_detected);
+  // const guideData = useSelector((state) => state.guideProgress?.guideStep);
+  // console.log("guideData:", guideData);
   const guideSteps = useSelector((state) => state.paymentGuide?.paymentGuide?.step_texts);
   const currentStep = useSelector((state) => state.guideProgress?.guideStep?.guide_progress?.current_step);
   console.log('currentStep:', currentStep);
@@ -62,7 +64,7 @@ const StartOcrSteps = ({vendor}) => {
         <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-3 max-w-[75%] self-start whitespace-pre-wrap">
           <p className="text-sm font-semibold">Step {currentStep + 1}:</p>
           <p className="text-sm mt-1">{guideSteps[currentStep]}</p>
-
+          <h2> {vendor} </h2>
           <div className="mt-4">
             <NextStep vendor={vendor} />
             <StuckHelp vendor={vendor} />

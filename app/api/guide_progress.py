@@ -42,10 +42,13 @@ def start_guide(vendor):
 
     db.session.add(new_guide_progress)
     db.session.commit()
-
+    step_texts = guide.step_texts or []
+    total_steps = len(step_texts)
     return jsonify({
         "guide_progress": new_guide_progress.to_dict(),
-        "payment_guide": guide.to_dict()
+        "payment_guide": guide.to_dict(),
+        "current_instruction": step_texts[0] if step_texts else "No steps available",
+        "total_steps": total_steps,
     }), 201
 
 

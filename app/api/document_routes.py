@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from app.forms import DocumentForm
 import os
 import time
+from app.utils.openai_utils import generate_steps_from_text, parse_steps
 from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number
 
 doc_routes = Blueprint('documents', __name__)
@@ -23,7 +24,6 @@ def submit_document_from_image():
 
     image = form.image.data
     user_id = current_user.id
-
     original_filename = secure_filename(image.filename)
     ext = os.path.splitext(original_filename)[1]
     filename = f"{uuid4()}{ext}"
@@ -44,14 +44,9 @@ def submit_document_from_image():
         guide = PaymentGuide.query.filter_by(user_id=user_id, vendor_name=normalized_vendor).first()
 
         if not guide:
-            steps = [
-                f"Search for '{vendor}' website",
-                "Log in to your account",
-                "Navigate to the payment section",
-                "Enter the amount due",
-                "Select payment method",
-                "Confirm payment"
-            ]
+            raw_steps = generate_steps_from_text(extracted_text, normalized_vendor)
+            steps = parse_steps(raw_steps)
+
             guide = PaymentGuide(
                 user_id=user_id,
                 vendor_name=normalized_vendor,

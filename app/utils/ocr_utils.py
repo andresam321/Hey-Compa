@@ -50,6 +50,7 @@ vendor_keywords = {
     "tucson electric power": "Tucson Electric Power",
     "waste management": "Waste Management",
     "city of boise utility billing service": "City of Boise Utility Billing Service",
+    "north clinic": "North Clinic",
 }
 
 

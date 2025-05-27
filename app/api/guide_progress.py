@@ -5,7 +5,6 @@ import os
 from datetime import datetime
 
 
-
 guide_progress_routes = Blueprint('guide_progress', __name__)
 
 # tested

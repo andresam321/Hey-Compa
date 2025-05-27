@@ -12,8 +12,10 @@ class PaymentGuide(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable = False)
     vendor_name = db.Column(db.String(120), nullable=False)
-    step_texts = db.Column(db.JSON, nullable=False)  # e.g. ["Go to site", "Click Pay"]
-    step_images = db.Column(db.JSON, nullable=True)  # Optional screenshots
+    step_texts = db.Column(db.JSON, nullable=False)  
+    step_images = db.Column(db.JSON, nullable=True)
+    # ai_step_texts = db.Column(db.JSON, nullable=True)  # Optional AI-generated steps
+    # ai_step_images = db.Column(db.JSON, nullable=True)  # Optional AI-generated images 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 

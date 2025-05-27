@@ -22,7 +22,6 @@ const NextStep = ({ vendor }) => {
   console.log("isComplete:", isComplete);
 
   // if (skipFirstStep && currentStepIndex === 0) return null;
-  
   const handleNextStep = async () => {
     try {
       if (!vendor) {

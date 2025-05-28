@@ -14,8 +14,10 @@ class PaymentGuide(db.Model):
     vendor_name = db.Column(db.String(120), nullable=False)
     step_texts = db.Column(db.JSON, nullable=False)  
     step_images = db.Column(db.JSON, nullable=True)
+    times_seen = db.Column(db.Integer, nullable=True, default=1)  
     # ai_step_texts = db.Column(db.JSON, nullable=True)  # Optional AI-generated steps
     # ai_step_images = db.Column(db.JSON, nullable=True)  # Optional AI-generated images 
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -29,6 +31,9 @@ class PaymentGuide(db.Model):
             "user_id":self.user_id,
             "vendor_name":self.vendor_name,
             "step_texts":self.step_texts,
-            "step_images":self.step_images
+            "step_images":self.step_images,
+            "times_seen": self.times_seen,
+            "updated_at": self.updated_at,
+            "created_at": self.created_at
 
         }

@@ -164,3 +164,10 @@ def parse_account_number(text):
 def extract_phone_number(text):
     match = re.search(r'(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})', text)
     return match.group() if match else None
+
+#not tested
+def normalize_text(text):
+    text = re.sub(r"\$?\d+(\.\d{2})?", "", text)  # remove amounts
+    text = re.sub(r"\b\d{1,2}/\d{1,2}/\d{2,4}\b", "", text)  # remove dates
+    text = re.sub(r"\d{6,}", "", text)  # remove long account numbers
+    return text.lower().strip()

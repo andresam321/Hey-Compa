@@ -16,31 +16,34 @@ const handleFileUpload = (e) => {
 
 
   return (
-<div className="min-h-screen w-full bg-[#1e1e2f] flex justify-center">
-  <div className="w-full max-w-5xl flex flex-col px-6 py-8">
+<div className="min-h-screen w-full bg-slate-800 flex items-center justify-center">
+  <div
+    className={`w-full max-w-2xl transition-all duration-300 ease-in-out ${
+      vendor ? "h-[85vh] rounded-lg" : "h-[400px] rounded-2xl"
+    } bg-slate-700 shadow-2xl flex flex-col overflow-hidden`}
+  >
 
-    {/* Header */}
-    <div className="mb-6 text-center">
-      <h1 className="text-3xl font-bold text-white">Hey Compa {user?.firstname || "User"} 👋</h1>
-    </div>
-
-      <div className="flex-1 bg-white rounded-lg shadow-md p-6 overflow-y-auto space-y-4 mb-6 min-h-[400px]">
-      <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-2 max-w-[75%]">
-        Need help with a bill? Try uploading it here!
+    {!vendor && (
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+        <h1 className="text-3xl font-semibold text-white mb-2">
+          Hey Compa {user?.firstname || "User"} 👋
+        </h1>
+        <p className="text-gray-300 text-sm">
+          Need help with a bill? Upload it below.
+        </p>
       </div>
+    )}
 
-      {vendor && (
-        <div className="bg-gray-200 text-gray-800 rounded-lg px-4 py-2 max-w-[75%] self-start">
-          <StartOcrSteps vendor={vendor} key={vendor} />
-        </div>
-      )}
-    </div>
 
-    <div className="...">
+    {vendor && (
+      <div className="flex-1 overflow-y-auto px-4 py-4 bg-[#1f1f27] space-y-4">
+        <StartOcrSteps vendor={vendor} key={vendor} />
+      </div>
+    )}
+    {/* Upload Always Visible */}
+    <div className="border-t border-[#3d3d45] px-4 py-3 bg-[#2a2a32]">
       <UploadImage setVendor={setVendor} />
     </div>
-
-
   </div>
 </div>
   );

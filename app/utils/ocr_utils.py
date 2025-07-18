@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image
 import re
 from app.utils.ocr_helpers import run_paddle_ocr
+import hashlib
 
 # ocr = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=True)
 
@@ -53,6 +54,13 @@ vendor_keywords = {
     "north clinic": "North Clinic",
 }
 
+def compute_image_hash(path):
+    """Computes a SHA-256 hash of the image file."""
+    sha256 = hashlib.sha256()
+    with open(path, 'rb') as f:
+        while chunk := f.read(8192):
+            sha256.update(chunk)
+    return sha256.hexdigest()
 
 #loads ocr engine once at module level, lang = language 'english
 #use_angle_cls=True helps detect rotated text (e.g., slanted/tilted labels).

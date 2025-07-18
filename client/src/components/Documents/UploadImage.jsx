@@ -5,7 +5,6 @@ import { thunkUploadImage } from '../../redux/document'
 import StartOcrSteps from '../GuideSteps/StartOcrSteps'
 
 const UploadImage = ({setVendor}) => {
-  const navigate = useDispatch();
   const dispatch = useDispatch();
   const [image, setImage] = useState();
   const [showImage, setShowImage] = useState();

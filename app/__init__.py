@@ -40,8 +40,6 @@ def create_app(config_class=Config):
     # Tell flask about our seed commands
 
 
-    app.config.from_object(Config)
-
     app.register_blueprint(user_routes, url_prefix='/api/users')
     app.register_blueprint(doc_routes, url_prefix='/api/documents')
     app.register_blueprint(payment_guide_routes, url_prefix='/api/payment_guide')

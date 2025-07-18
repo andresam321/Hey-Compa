@@ -8,7 +8,7 @@ import hashlib
 import os
 import time
 from app.utils.openai_utils import generate_steps_from_text, parse_steps
-from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number, normalize_text
+from app.utils.ocr_utils import detect_vendor, parse_due_date, find_amount, extract_image_text, parse_account_number, extract_phone_number, extract_phone_number, normalize_text,compute_image_hash
 
 doc_routes = Blueprint('documents', __name__)
 
@@ -30,7 +30,16 @@ def submit_document_from_image():
     filename = f"{uuid4()}{ext}"
     os.makedirs("app/uploads", exist_ok=True)
     temp_path = os.path.join("app/uploads", filename)
-    image.save(temp_path)
+    image.save(temp_path)  
+    image_hash = compute_image_hash(temp_path)
+    
+    existing_doc = Document.query.filter_by(user_id=user_id, image_hash=image_hash).first()
+    if existing_doc:
+            return jsonify({
+                'step_texts': existing_doc.payment_guide.step_texts,
+                'vendor_detected': existing_doc.vendor_detected,
+                'message': 'Exact document match — skipping OCR + GPT.'
+        }), 200
 
     try:
         # OCR and extraction
@@ -42,8 +51,8 @@ def submit_document_from_image():
         account_number = parse_account_number(extracted_text)
 
         normalized_vendor = vendor.strip().lower()
-        guide = PaymentGuide.query.filter_by(user_id=user_id, vendor_name=normalized_vendor).first()
 
+        guide = PaymentGuide.query.filter_by(user_id=user_id, vendor_name=normalized_vendor).first()
         if not guide:
     # No existing guide — generate fresh steps
             raw_steps = generate_steps_from_text(extracted_text, normalized_vendor)
@@ -84,7 +93,8 @@ def submit_document_from_image():
             amount_due=amount,
             phone_number=phone_number,
             account_number=account_number,
-            payment_guide_id=guide.id
+            payment_guide_id=guide.id,
+            image_hash=image_hash,
         )
         db.session.add(doc)
         db.session.commit()

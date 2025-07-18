@@ -31,7 +31,7 @@ def generate_steps_from_text(extracted_text, vendor):
 
     return output  # Return the raw string from GPT (e.g., "1. Go to site\n2. Log in...")
 
-# 🧹 Helper function to parse GPT response into a clean list of steps
+# Helper function to parse GPT response into a clean list of steps
 def parse_steps(raw_text):
     # Split the text by line breaks and remove any extra whitespace
     lines = raw_text.strip().split("\n")

@@ -1,0 +1,1 @@
+from .task import process_document  # Import the Celery task

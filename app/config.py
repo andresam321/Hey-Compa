@@ -13,8 +13,11 @@ class Config:
         print(f"⚠️ DATABASE_URL read from env: {db_url}") 
     print(f"📦 DATABASE_URL = {repr(os.environ.get('DATABASE_URL'))}")
 
-    SQLALCHEMY_DATABASE_URI = db_url or 'sqlite:///default.db'  # Fallback to SQLite if not provided
+    basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))  # goes up from /app to root
+    SQLALCHEMY_DATABASE_URI = db_url or f"sqlite:///{os.path.join(basedir, 'instance', 'dev.db')}"
+
     SQLALCHEMY_ECHO = os.environ.get('SQLALCHEMY_ECHO', 'False').lower() == 'true'
+    
 
     # Debug mode
     DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'

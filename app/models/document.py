@@ -10,7 +10,7 @@ class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable = False)
     payment_guide_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('payment_guides.id')), nullable=True)
-    extracted_text = db.Column(db.Text, nullable=False)
+    extracted_text = db.Column(db.Text, nullable=True)
     expiration_date = db.Column(db.Date, nullable=True)
     phone_number = db.Column(db.String(50), nullable=True)
     account_number = db.Column(db.String(100), nullable=True)

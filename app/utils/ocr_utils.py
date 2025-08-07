@@ -65,8 +65,8 @@ def compute_image_hash(path):
 #loads ocr engine once at module level, lang = language 'english
 #use_angle_cls=True helps detect rotated text (e.g., slanted/tilted labels).
 
-def extract_image_text(image_path):
-    result = run_paddle_ocr(image_path)
+def extract_image_text(image_path, ocr_instance=None):
+    result = run_paddle_ocr(ocr_instance, image_path)
     if not result or not result[0]:
         return ""
     lines = []
